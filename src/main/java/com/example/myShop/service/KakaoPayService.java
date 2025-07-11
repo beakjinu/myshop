@@ -43,7 +43,7 @@ public class KakaoPayService {
 
             // 2. 요청 헤더
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "KakaoAK 6c55a21d91f10c80e206055808d1e999"); // 카카오페이 Admin Key 발급 받으면 됩니다.
+            headers.add("Authorization", "KakaoAK Your_Admin_Key"); // 카카오페이 Admin Key 발급 받으면 됩니다.
             headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
             // 3. 요청 파라미터
@@ -98,7 +98,7 @@ public class KakaoPayService {
 
         //위와 같은 흐름입니다. 헤더와 바디를 json으로 보냄
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK 6c55a21d91f10c80e206055808d1e999"); //  Admin Key
+        headers.add("Authorization", "KakaoAK Your_Admin_Key"); //  Admin Key
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //바디
