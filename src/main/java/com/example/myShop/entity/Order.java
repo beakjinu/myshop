@@ -33,6 +33,9 @@ public class Order {
     private LocalDateTime regTime;
     private LocalDateTime updateTime;
 
+    @Column(name = "tid")
+    private String tid;
+
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
@@ -63,4 +66,5 @@ public class Order {
             orderItem.cancel();
         }
     }
+
 }
