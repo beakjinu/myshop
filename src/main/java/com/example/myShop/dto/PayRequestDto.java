@@ -16,6 +16,10 @@ public class PayRequestDto {
     @Max(value = 999, message = "최대 수량은 999개까지 입니다.")
     private int count;
 
+
+    private String partnerOrderId;
+
+    private String email;
     private String name;
     private String itemName;
     private LocalDateTime orderDateTime;
