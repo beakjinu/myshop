@@ -39,6 +39,7 @@ public class OrderService {
         OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
         orderItemList.add(orderItem);
         Order order = Order.createOrder(member, orderItemList);
+        order.setTid(orderDto.getTid());
         orderRepository.save(order);
 
         return order.getId();
