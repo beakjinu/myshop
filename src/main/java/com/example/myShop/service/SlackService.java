@@ -40,7 +40,7 @@ public class SlackService {
             //Post방식으로 위 url에 메세지 보냄
             ResponseEntity<String> response = restTemplate.postForEntity(SLACK_WEBHOOK_URL, request, String.class);
 
-            log.info("✅ Slack 메시지 전송 성공: status={}, body={}", response.getStatusCode(), response.getBody());
+            log.info(" Slack 메시지 전송 성공: status={}, body={}", response.getStatusCode(), response.getBody());
 
         } catch (Exception e) {
             log.error("Slack 메시지 전송 실패", e);

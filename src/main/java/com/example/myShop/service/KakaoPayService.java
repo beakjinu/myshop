@@ -142,10 +142,10 @@ public class KakaoPayService {
 
         } catch (HttpClientErrorException e) {
             String body = e.getResponseBodyAsString();
-            log.error("🔥 카카오페이 승인 실패 응답: {}", body);
+            log.error(" 카카오페이 승인 실패 응답: {}", body);
             throw new RuntimeException("카카오 결제 승인 실패: " + body);
         } catch (Exception e) {
-            log.error("💥 승인 요청 중 일반 예외", e);
+            log.error(" 승인 요청 중 일반 예외", e);
             throw new RuntimeException("결제 승인 실패: " + e.getMessage());
         }
     }
