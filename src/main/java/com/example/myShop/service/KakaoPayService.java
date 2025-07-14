@@ -43,7 +43,7 @@ public class KakaoPayService {
 
             // 2. 요청 헤더
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "KakaoAK 6c55a21d91f10c80e206055808d1e999"); // 카카오페이 Admin Key 발급 받으면 됩니다.
+            headers.add("Authorization", "KakaoAK YOUR ADMIN KEY"); // 카카오페이 Admin Key 발급 받으면 됩니다.
             headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
             // 3. 요청 파라미터
@@ -105,7 +105,7 @@ public class KakaoPayService {
     //우리가 QR 찍은 후의 결제승인요청
     public PayApproveResponseDto kakaoPayApprove(PayApproveRequestDto dto) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK 6c55a21d91f10c80e206055808d1e999");
+        headers.add("Authorization", "KakaoAK YOUR ADMIN KEY");
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
