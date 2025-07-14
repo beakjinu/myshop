@@ -17,9 +17,9 @@ public class SlackService {
 
     //슬랙 인커밍 웹훅 URL 넣어 줘야 함. **슬랙 자유채널 url 대체하면 자유채널로 메세지 보내짐.(api발급 안해도 됨)**
     //테스트 하려면 Slack api에서 발급 받아서 대체하면 됨.
-    //https://hooks.slack.com/services/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 -> 이건 제 jinu 채널 url
+    //https://hooks.slack.com/services/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 -> 이건 제 jinu 채널 url
 
-    private static final String SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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";
+    private static final String SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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";
     //Http요청
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -39,6 +39,8 @@ public class SlackService {
 
             //Post방식으로 위 url에 메세지 보냄
             ResponseEntity<String> response = restTemplate.postForEntity(SLACK_WEBHOOK_URL, request, String.class);
+
+            log.info("✅ Slack 메시지 전송 성공: status={}, body={}", response.getStatusCode(), response.getBody());
 
         } catch (Exception e) {
             log.error("Slack 메시지 전송 실패", e);
