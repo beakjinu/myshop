@@ -63,12 +63,16 @@ public class OrderController {
 
     @PostMapping("/order/{orderId}/cancel")
     public @ResponseBody ResponseEntity orderCancel(@PathVariable Long orderId, Principal principal){
+        String email = principal.getName();
+
         if(!orderService.validateOrder(orderId, principal.getName())){
             return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-
-        orderService.cancelOrder(orderId);
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
-
+        try{
+            orderService.cancelOrder(orderId, email);
+            return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<String>("주문 취소 실패" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

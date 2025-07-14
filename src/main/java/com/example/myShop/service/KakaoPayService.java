@@ -4,8 +4,10 @@ import com.example.myShop.dto.PayApproveRequestDto;
 import com.example.myShop.dto.PayApproveResponseDto;
 import com.example.myShop.dto.PayRequestDto;
 import com.example.myShop.entity.Item;
+import com.example.myShop.entity.Order;
 import com.example.myShop.entity.PaymentTemp;
 import com.example.myShop.repository.ItemRepository;
+import com.example.myShop.repository.OrderRepository;
 import com.example.myShop.repository.PaymentTempRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.UUID;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class KakaoPayService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ItemRepository itemRepository;
     private final PaymentTempRepository paymentTempRepository;
+    private final OrderRepository orderRepository;
 
     //주문하기 눌렀을 때, QR 요청하는 메서드입니다.
     public String kakaoPayReady(PayRequestDto dto) {
@@ -43,7 +47,7 @@ public class KakaoPayService {
 
             // 2. 요청 헤더
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "KakaoAK YOUR ADMIN KEY"); // 카카오페이 Admin Key 발급 받으면 됩니다.
+            headers.add("Authorization", "KakaoAK API KEY"); // 카카오페이 Admin Key 발급 받으면 됩니다.
             headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
             // 3. 요청 파라미터
@@ -105,7 +109,7 @@ public class KakaoPayService {
     //우리가 QR 찍은 후의 결제승인요청
     public PayApproveResponseDto kakaoPayApprove(PayApproveRequestDto dto) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK YOUR ADMIN KEY");
+        headers.add("Authorization", "KakaoAK API KEY");
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -150,7 +154,34 @@ public class KakaoPayService {
         }
     }
 
+    //결제 취소
+    public void cancelPayment(String tid) {
+        try {
+            Order order = (Order) orderRepository.findByTid(tid)
+                    .orElseThrow(() -> new IllegalArgumentException("tid로 주문을 찾을 수 없습니다."));
 
+
+            int cancelAmount = order.getTotalPrice();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "KakaoAK " + "APi key");
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("cid", "TC0ONETIME");
+            params.add("tid", tid);
+            params.add("cancel_amount", String.valueOf(cancelAmount));
+            params.add("cancel_tax_free_amount", "0");
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+            restTemplate.postForEntity("https://kapi.kakao.com/v1/payment/cancel", request, String.class);
+
+        } catch (Exception e) {
+            log.error("카카오페이 결제 취소 실패", e);
+            throw new RuntimeException("카카오페이 결제 취소 실패: " + e.getMessage());
+        }
+    }
 
 
 }

@@ -28,6 +28,8 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ItemImgRepository itemImgRepository;
+    private final KakaoPayService kakaoPayService;
+    private final SlackService slackService;
 
     public Long order(OrderDto orderDto, String email) {
 
@@ -75,11 +77,15 @@ public class OrderService {
         return true;
     }
 
-    public void cancelOrder(Long orderId){
+    public void cancelOrder(Long orderId, String email){
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
+        String tid = order.getTid();
+
+        kakaoPayService.cancelPayment(tid);
+
         order.cancelOrder();
+
+        slackService.sendMessage("[Team4] " + email + " 님의 주문이 취소되었습니다. 주문번호: " + orderId);
     }
-
-
 }
